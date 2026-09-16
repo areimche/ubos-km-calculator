@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UBOS KM-Rechner</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.mjs" type="module"></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="container">
+      <h1>UBOS KM-Rechner</h1>
+      <p class="hint">
+        Lade eine Kilometertabelle (Excel, CSV oder PDF) hoch und wähle zwei Teams/Orte aus.
+      </p>
+
+      <section class="card">
+        <label for="tableFile">Kilometertabelle hochladen</label>
+        <input id="tableFile" type="file" accept=".csv,.xlsx,.xls,.pdf" />
+        <p class="small">Tipp: CSV aus Excel exportieren funktioniert besonders zuverlässig.</p>
+
+        <label for="csvPaste">Oder CSV-Inhalt einfügen</label>
+        <textarea id="csvPaste" rows="5" placeholder="Team A;Team B;Kilometer"></textarea>
+        <button id="loadPasted" type="button">Eingefügte Tabelle laden</button>
+      </section>
+
+      <section class="card">
+        <div class="field">
+          <label for="fromTeam">Team/Ort A</label>
+          <select id="fromTeam" disabled>
+            <option value="">Bitte Tabelle laden</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="toTeam">Team/Ort B</label>
+          <select id="toTeam" disabled>
+            <option value="">Bitte Tabelle laden</option>
+          </select>
+        </div>
+        <button id="calculate" type="button" disabled>Gesamtkilometer anzeigen</button>
+        <output id="result" class="result" aria-live="polite"></output>
+      </section>
+    </main>
+  </body>
+</html>
