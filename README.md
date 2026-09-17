@@ -1,52 +1,52 @@
 # ubos-km-calculator
 
-Weboberfläche zur Ermittlung von Gesamtkilometern zwischen zwei Teams/Orten auf Basis einer Kilometertabelle.
+Web interface to calculate total kilometers between two teams/locations based on a distance table.
 
 ## Features
 
-- Mobile-first Weboberfläche (gut auf Smartphones nutzbar)
-- Upload einer Kilometertabelle als **Excel** (`.xlsx`, `.xls`), **CSV** oder **PDF**
-- Alternative: CSV-Inhalt direkt einfügen
-- Auswahl von Team/Ort A und B, anschließend Anzeige der Gesamtkilometer aus der Tabelle
+- Mobile-first web interface (works well on smartphones)
+- Upload a distance table as **Excel** (`.xlsx`, `.xls`), **CSV**, or **PDF**
+- Alternative option: paste CSV content directly
+- Select Team/Location A and B, then display the total kilometers from the table
 
-## Erwartete Tabellenformate
+## Expected table formats
 
-### 1) Paarliste (empfohlen)
+### 1) Pair list (recommended)
 
-Beispiel:
+Example:
 
 ```csv
-Von;Nach;Kilometer
+From;To;Kilometers
 Osnabrück;Bramsche;22
 Bramsche;Lingen;55
 ```
 
 ### 2) Matrix
 
-Erste Zeile enthält Zielorte, erste Spalte enthält Startorte.
+The first row contains destination locations, and the first column contains starting locations.
 
-Eine Beispiel-Datei liegt unter:
+An example file is available at:
 
 - `/home/runner/work/ubos-km-calculator/ubos-km-calculator/data/kilometertabelle-beispiel.csv`
 
-## Lokal starten
+## Run locally
 
-Da dies eine statische App ist, genügt ein einfacher Webserver, z. B.:
+Since this is a static app, a simple web server is enough, for example:
 
 ```bash
 python -m http.server 8080
 ```
 
-Dann im Browser öffnen: `http://localhost:8080`
+Then open in the browser: `http://localhost:8080`
 
 ## GitHub Pages
 
-Die App ist GitHub-Pages-kompatibel (reine statische Dateien).
+The app is GitHub Pages compatible (pure static files).
 
-1. Repository auf GitHub öffnen
+1. Open the repository on GitHub
 2. **Settings → Pages**
 3. Source: **Deploy from a branch**
-4. Branch: gewünschter Branch (z. B. `main`), Folder: `/ (root)`
-5. Speichern
+4. Branch: desired branch (for example `main`), Folder: `/ (root)`
+5. Save
 
-Danach ist die Seite über die angezeigte GitHub-Pages-URL erreichbar.
+After that, the site is available at the displayed GitHub Pages URL.
