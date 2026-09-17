@@ -5,6 +5,7 @@ Web interface to calculate total kilometers between two teams/locations based on
 ## Features
 
 - Mobile-first web interface (works well on smartphones)
+- Interface available in German and English
 - Upload a distance table as **Excel** (`.xlsx`, `.xls`), **CSV**, or **PDF**
 - Alternative option: paste CSV content directly
 - Select Team/Location A and B, then display the total kilometers from the table

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UBOS KM-Rechner</title>
+    <title>UBOS KM Calculator</title>
     <link rel="stylesheet" href="./styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.mjs" type="module"></script>
@@ -11,35 +11,42 @@
   </head>
   <body>
     <main class="container">
-      <h1>UBOS KM-Rechner</h1>
-      <p class="hint">
-        Lade eine Kilometertabelle (Excel, CSV oder PDF) hoch und wähle zwei Teams/Orte aus.
-      </p>
+      <div class="toolbar">
+        <div class="language-switch">
+          <label for="languageSelect" id="languageLabel"></label>
+          <select id="languageSelect">
+            <option value="de">Deutsch</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+      <h1 id="appTitle"></h1>
+      <p class="hint" id="appHint"></p>
 
       <section class="card">
-        <label for="tableFile">Kilometertabelle hochladen</label>
+        <label for="tableFile" id="tableFileLabel"></label>
         <input id="tableFile" type="file" accept=".csv,.xlsx,.xls,.pdf" />
-        <p class="small">Tipp: CSV aus Excel exportieren funktioniert besonders zuverlässig.</p>
+        <p class="small" id="csvHint"></p>
 
-        <label for="csvPaste">Oder CSV-Inhalt einfügen</label>
-        <textarea id="csvPaste" rows="5" placeholder="Team A;Team B;Kilometer"></textarea>
-        <button id="loadPasted" type="button">Eingefügte Tabelle laden</button>
+        <label for="csvPaste" id="csvPasteLabel"></label>
+        <textarea id="csvPaste" rows="5"></textarea>
+        <button id="loadPasted" type="button"></button>
       </section>
 
       <section class="card">
         <div class="field">
-          <label for="fromTeam">Team/Ort A</label>
+          <label for="fromTeam" id="fromTeamLabel"></label>
           <select id="fromTeam" disabled>
-            <option value="">Bitte Tabelle laden</option>
+            <option value=""></option>
           </select>
         </div>
         <div class="field">
-          <label for="toTeam">Team/Ort B</label>
+          <label for="toTeam" id="toTeamLabel"></label>
           <select id="toTeam" disabled>
-            <option value="">Bitte Tabelle laden</option>
+            <option value=""></option>
           </select>
         </div>
-        <button id="calculate" type="button" disabled>Gesamtkilometer anzeigen</button>
+        <button id="calculate" type="button" disabled></button>
         <output id="result" class="result" aria-live="polite"></output>
       </section>
     </main>
