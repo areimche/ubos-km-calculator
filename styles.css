@@ -24,6 +24,20 @@ body {
   padding: 1rem;
 }
 
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.language-switch {
+  width: 180px;
+}
+
+.language-switch label {
+  margin-bottom: 0.25rem;
+}
+
 h1 {
   margin: 0 0 0.5rem;
   font-size: 1.6rem;
