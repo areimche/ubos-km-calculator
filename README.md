@@ -1,34 +1,20 @@
 # ubos-km-calculator
 
-Web interface to calculate total kilometers between two teams/locations based on a distance table.
+Web interface to calculate total kilometers between two teams/locations based on a PDF distance table.
 
 ## Features
 
 - Mobile-first web interface (works well on smartphones)
 - Interface available in German and English
-- Upload a distance table as **Excel** (`.xlsx`, `.xls`), **CSV**, or **PDF**
-- Alternative option: paste CSV content directly
+- Upload a distance table as **PDF**
 - Select Team/Location A and B, then display the total kilometers from the table
 
-## Expected table formats
+## Expected PDF format
 
-### 1) Pair list (recommended)
-
-Example:
-
-```csv
-From;To;Kilometers
-Osnabrück;Bramsche;22
-Bramsche;Lingen;55
-```
-
-### 2) Matrix
-
-The first row contains destination locations, and the first column contains starting locations.
-
-An example file is available at:
-
-- `/home/runner/work/ubos-km-calculator/ubos-km-calculator/data/kilometertabelle-beispiel.csv`
+Each row in the PDF should contain:
+- start/team/location
+- destination/team/location
+- kilometer value
 
 ## Run locally
 

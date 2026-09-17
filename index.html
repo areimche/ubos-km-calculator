@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UBOS KM Calculator</title>
     <link rel="stylesheet" href="./styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.mjs" type="module"></script>
     <script src="./app.js" defer></script>
   </head>
@@ -25,12 +24,8 @@
 
       <section class="card">
         <label for="tableFile" id="tableFileLabel"></label>
-        <input id="tableFile" type="file" accept=".csv,.xlsx,.xls,.pdf" />
+        <input id="tableFile" type="file" accept=".pdf" />
         <p class="small" id="csvHint"></p>
-
-        <label for="csvPaste" id="csvPasteLabel"></label>
-        <textarea id="csvPaste" rows="5"></textarea>
-        <button id="loadPasted" type="button"></button>
       </section>
 
       <section class="card">
