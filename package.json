@@ -1,0 +1,25 @@
+{
+  "name": "ubos-km-calculator",
+  "version": "1.0.0",
+  "description": "Web interface to calculate total kilometers between two teams/locations based on a PDF distance table.",
+  "main": "app.js",
+  "scripts": {
+    "generate-data": "node scripts/generate-data.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/areimche/ubos-km-calculator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/areimche/ubos-km-calculator/issues"
+  },
+  "homepage": "https://github.com/areimche/ubos-km-calculator#readme",
+  "devDependencies": {
+    "pdfjs-dist": "^4.5.136"
+  }
+}

@@ -95,12 +95,6 @@ select:disabled {
   cursor: not-allowed;
 }
 
-.small {
-  margin: -0.2rem 0 0.8rem;
-  font-size: 0.9rem;
-  color: #4d5a67;
-}
-
 .field {
   margin-bottom: 0.35rem;
 }
