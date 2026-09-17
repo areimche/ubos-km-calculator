@@ -1,6 +1,4 @@
 const tableFile = document.getElementById('tableFile');
-const csvPaste = document.getElementById('csvPaste');
-const loadPasted = document.getElementById('loadPasted');
 const fromTeam = document.getElementById('fromTeam');
 const toTeam = document.getElementById('toTeam');
 const calculate = document.getElementById('calculate');
@@ -10,8 +8,7 @@ const languageLabel = document.getElementById('languageLabel');
 const appTitle = document.getElementById('appTitle');
 const appHint = document.getElementById('appHint');
 const tableFileLabel = document.getElementById('tableFileLabel');
-const csvHint = document.getElementById('csvHint');
-const csvPasteLabel = document.getElementById('csvPasteLabel');
+const pdfHint = document.getElementById('csvHint');
 const fromTeamLabel = document.getElementById('fromTeamLabel');
 const toTeamLabel = document.getElementById('toTeamLabel');
 
@@ -24,12 +21,9 @@ const translations = {
     pageTitle: 'UBOS KM-Rechner',
     languageLabel: 'Sprache',
     appTitle: 'UBOS KM-Rechner',
-    appHint: 'Lade eine Kilometertabelle (Excel, CSV oder PDF) hoch und wähle zwei Teams/Orte aus.',
-    tableFileLabel: 'Kilometertabelle hochladen',
-    csvHint: 'Tipp: CSV aus Excel exportieren funktioniert besonders zuverlässig.',
-    csvPasteLabel: 'Oder CSV-Inhalt einfügen',
-    csvPlaceholder: 'Team A;Team B;Kilometer',
-    loadPasted: 'Eingefügte Tabelle laden',
+    appHint: 'Lade eine Kilometertabelle als PDF hoch und wähle zwei Teams/Orte aus.',
+    tableFileLabel: 'PDF-Kilometertabelle hochladen',
+    pdfHint: 'Die PDF sollte pro Zeile Start, Ziel und Kilometer enthalten.',
     fromTeamLabel: 'Team/Ort A',
     toTeamLabel: 'Team/Ort B',
     calculate: 'Gesamtkilometer anzeigen',
@@ -38,10 +32,9 @@ const translations = {
     noValidData: 'Keine gültigen Kilometerdaten in der Datei gefunden.',
     loadedCount: '{count} Orte/Teams geladen.',
     pdfUnavailable: 'PDF-Verarbeitung ist nicht verfügbar.',
-    fileFormatUnsupported: 'Dateiformat nicht unterstützt.',
+    fileFormatUnsupported: 'Bitte eine PDF-Datei hochladen.',
     tableLoading: 'Tabelle wird geladen...',
     readError: 'Fehler beim Einlesen: {message}',
-    pasteCsvPrompt: 'Bitte CSV-Inhalt einfügen.',
     chooseTeams: 'Bitte Team/Ort A und B auswählen.',
     sameTeamResult: 'Gesamtkilometer ({from} → {to}): 0 km',
     noValueFound: 'Für {from} ↔ {to} wurde kein Wert gefunden.',
@@ -51,12 +44,9 @@ const translations = {
     pageTitle: 'UBOS KM Calculator',
     languageLabel: 'Language',
     appTitle: 'UBOS KM Calculator',
-    appHint: 'Upload a distance table (Excel, CSV, or PDF) and select two teams/locations.',
-    tableFileLabel: 'Upload distance table',
-    csvHint: 'Tip: CSV exported from Excel is usually the most reliable format.',
-    csvPasteLabel: 'Or paste CSV content',
-    csvPlaceholder: 'Team A;Team B;Kilometers',
-    loadPasted: 'Load pasted table',
+    appHint: 'Upload the distance table as a PDF and select two teams/locations.',
+    tableFileLabel: 'Upload PDF distance table',
+    pdfHint: 'The PDF should contain source, destination, and kilometers per line.',
     fromTeamLabel: 'Team/Location A',
     toTeamLabel: 'Team/Location B',
     calculate: 'Show total kilometers',
@@ -65,10 +55,9 @@ const translations = {
     noValidData: 'No valid kilometer data found in the file.',
     loadedCount: '{count} locations/teams loaded.',
     pdfUnavailable: 'PDF processing is not available.',
-    fileFormatUnsupported: 'File format not supported.',
+    fileFormatUnsupported: 'Please upload a PDF file.',
     tableLoading: 'Loading table...',
     readError: 'Error while reading file: {message}',
-    pasteCsvPrompt: 'Please paste CSV content.',
     chooseTeams: 'Please select Team/Location A and B.',
     sameTeamResult: 'Total kilometers ({from} → {to}): 0 km',
     noValueFound: 'No value found for {from} ↔ {to}.',
@@ -122,10 +111,7 @@ const applyStaticText = () => {
   appTitle.textContent = t('appTitle');
   appHint.textContent = t('appHint');
   tableFileLabel.textContent = t('tableFileLabel');
-  csvHint.textContent = t('csvHint');
-  csvPasteLabel.textContent = t('csvPasteLabel');
-  csvPaste.placeholder = t('csvPlaceholder');
-  loadPasted.textContent = t('loadPasted');
+  pdfHint.textContent = t('pdfHint');
   fromTeamLabel.textContent = t('fromTeamLabel');
   toTeamLabel.textContent = t('toTeamLabel');
   calculate.textContent = t('calculate');
@@ -181,11 +167,10 @@ const parseNumber = (raw) => {
   return Number.isFinite(num) ? num : Number.NaN;
 };
 
-const parseDelimitedLine = (line) => {
-  const delimiter = line.includes(';') ? ';' : line.includes('\t') ? '\t' : ',';
-  const parts = line.split(delimiter).map((part) => part.trim().replace(/^"|"$/g, ''));
-  return parts;
-};
+const parseDelimitedLine = (line) =>
+  line
+    .split(/[;\t,]/)
+    .map((part) => part.trim().replace(/^"|"$/g, ''));
 
 const resolveColumnIndex = (headerRow, kind, fallback) => {
   const candidates = nameHints[kind];
@@ -262,24 +247,6 @@ const parseRows = (rows) => {
   }
 };
 
-const parseCSVText = (text) => {
-  const lines = text
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-  const rows = lines.map(parseDelimitedLine);
-  parseRows(rows);
-};
-
-const parseExcelBuffer = (arrayBuffer) => {
-  const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-  for (const sheetName of workbook.SheetNames) {
-    const worksheet = workbook.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
-    parseRows(rows);
-  }
-};
-
 const parsePDFBuffer = async (arrayBuffer) => {
   if (!window.pdfjsLib) {
     throw new Error(t('pdfUnavailable'));
@@ -345,11 +312,7 @@ const populateSelects = () => {
 const processArrayBuffer = async (arrayBuffer, extension) => {
   resetData();
 
-  if (extension === 'csv') {
-    parseCSVText(new TextDecoder('utf-8').decode(arrayBuffer));
-  } else if (extension === 'xlsx' || extension === 'xls') {
-    parseExcelBuffer(arrayBuffer);
-  } else if (extension === 'pdf') {
+  if (extension === 'pdf') {
     await parsePDFBuffer(arrayBuffer);
   } else {
     throw new Error(t('fileFormatUnsupported'));
@@ -376,19 +339,6 @@ tableFile.addEventListener('change', async (event) => {
     calculate.disabled = true;
     setResultKey('readError', { message: error.message });
   }
-});
-
-loadPasted.addEventListener('click', () => {
-  const text = csvPaste.value.trim();
-  resetData();
-
-  if (!text) {
-    setResultKey('pasteCsvPrompt');
-    return;
-  }
-
-  parseCSVText(text);
-  populateSelects();
 });
 
 calculate.addEventListener('click', () => {
