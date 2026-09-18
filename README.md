@@ -8,6 +8,8 @@ Web interface to calculate total kilometers between two teams/locations based on
 - Interface available in German and English
 - Distance data is loaded automatically from `data/kilometertabelle.json`
 - Select Team/Location A and B, then display the total kilometers from the table
+- Estimated travel cost (0.30 €/km) is shown alongside the kilometers
+- The last selected team is remembered (stored in the browser via `localStorage`)
 
 ## Distance data
 

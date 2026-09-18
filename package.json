@@ -1,6 +1,6 @@
 {
   "name": "ubos-km-calculator",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Web interface to calculate total kilometers between two teams/locations based on a PDF distance table.",
   "main": "app.js",
   "scripts": {

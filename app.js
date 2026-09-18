@@ -1,7 +1,9 @@
 const fromTeam = document.getElementById('fromTeam');
 const toTeam = document.getElementById('toTeam');
 const calculate = document.getElementById('calculate');
-const result = document.getElementById('result');
+const resultValue = document.getElementById('resultValue');
+const resultCost = document.getElementById('resultCost');
+const resultCaption = document.getElementById('resultCaption');
 const languageSelect = document.getElementById('languageSelect');
 const languageLabel = document.getElementById('languageLabel');
 const appTitle = document.getElementById('appTitle');
@@ -10,6 +12,7 @@ const fromTeamLabel = document.getElementById('fromTeamLabel');
 const toTeamLabel = document.getElementById('toTeamLabel');
 
 const DATA_URL = './data/kilometertabelle.json';
+const COST_PER_KM = 0.3;
 
 let kmGraph = new Map();
 let knownTeams = [];
@@ -32,9 +35,10 @@ const translations = {
     tableLoading: 'Tabelle wird geladen...',
     readError: 'Fehler beim Laden der Tabelle: {message}',
     chooseTeams: 'Bitte Team und Zielhalle auswählen.',
-    sameTeamResult: 'Gesamtkilometer ({from} → {to}): 0 km',
+    sameTeamKm: '0 km',
+    routeCaption: '{from} → {to}',
     noValueFound: 'Für {from} ↔ {to} wurde kein Wert gefunden.',
-    totalKm: 'Gesamtkilometer ({from} → {to}): {km} km',
+    totalKm: '{km} km',
   },
   en: {
     pageTitle: 'UBOS KM Calculator',
@@ -51,9 +55,10 @@ const translations = {
     tableLoading: 'Loading table...',
     readError: 'Error loading table: {message}',
     chooseTeams: 'Please select a team and a destination venue.',
-    sameTeamResult: 'Total kilometers ({from} → {to}): 0 km',
+    sameTeamKm: '0 km',
+    routeCaption: '{from} → {to}',
     noValueFound: 'No value found for {from} ↔ {to}.',
-    totalKm: 'Total kilometers ({from} → {to}): {km} km',
+    totalKm: '{km} km',
   },
 };
 
@@ -79,7 +84,26 @@ const t = (key, vars = {}) => {
 
 const setResultKey = (key, vars = {}) => {
   lastResultMessage = { key, vars };
-  result.textContent = t(key, vars);
+  renderResult(key, vars);
+};
+
+const KM_RESULT_KEYS = new Set(['totalKm', 'sameTeamKm']);
+
+const formatCost = (km) => {
+  const locale = currentLang === 'de' ? 'de-DE' : 'en-US';
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(km * COST_PER_KM);
+};
+
+const renderResult = (key, vars = {}) => {
+  if (KM_RESULT_KEYS.has(key)) {
+    resultValue.textContent = t(key, vars);
+    resultCost.textContent = formatCost(vars.km ?? 0);
+    resultCaption.textContent = t('routeCaption', vars);
+  } else {
+    resultValue.textContent = '';
+    resultCost.textContent = '';
+    resultCaption.textContent = t(key, vars);
+  }
 };
 
 const renderCurrentResult = () => {
@@ -87,7 +111,7 @@ const renderCurrentResult = () => {
     return;
   }
 
-  result.textContent = t(lastResultMessage.key, lastResultMessage.vars);
+  renderResult(lastResultMessage.key, lastResultMessage.vars);
 };
 
 const applyStaticText = () => {
@@ -125,6 +149,11 @@ const populateSelects = (data) => {
   fromTeam.innerHTML = `<option value="">${t('pleaseChoose')}</option>${teamOptions}`;
   toTeam.innerHTML = `<option value="">${t('pleaseChoose')}</option>${locationOptions}`;
 
+  const savedTeam = window.localStorage.getItem('fromTeam');
+  if (savedTeam && knownTeams.includes(savedTeam)) {
+    fromTeam.value = savedTeam;
+  }
+
   const hasData = knownTeams.length > 0 && knownLocations.length > 0;
   fromTeam.disabled = !hasData;
   toTeam.disabled = !hasData;
@@ -159,6 +188,14 @@ const loadDistanceTable = async () => {
   }
 };
 
+fromTeam.addEventListener('change', () => {
+  if (fromTeam.value) {
+    window.localStorage.setItem('fromTeam', fromTeam.value);
+  } else {
+    window.localStorage.removeItem('fromTeam');
+  }
+});
+
 calculate.addEventListener('click', () => {
   const from = fromTeam.value;
   const to = toTeam.value;
@@ -169,7 +206,7 @@ calculate.addEventListener('click', () => {
   }
 
   if (from === to) {
-    setResultKey('sameTeamResult', { from, to });
+    setResultKey('sameTeamKm', { from, to });
     return;
   }
 
