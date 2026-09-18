@@ -37,15 +37,3 @@ python3 -m http.server 8080
 ```
 
 Then open in the browser: `http://localhost:8080`
-
-## GitHub Pages
-
-The app is GitHub Pages compatible (pure static files).
-
-1. Open the repository on GitHub
-2. **Settings → Pages**
-3. Source: **Deploy from a branch**
-4. Branch: desired branch (for example `main`), Folder: `/ (root)`
-5. Save
-
-After that, the site is available at the displayed GitHub Pages URL.
