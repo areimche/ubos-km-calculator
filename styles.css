@@ -107,6 +107,36 @@ select:disabled {
   background: #eff6ff;
   border: 1px solid #bfd7ff;
   min-height: 2.7rem;
+  text-align: center;
+}
+
+.result-value {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.2;
+}
+
+.result-cost {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 0.1rem;
+}
+
+.result-caption {
+  display: block;
+  font-size: 0.85rem;
+  color: #5a6b7a;
+  margin-top: 0.15rem;
+}
+
+.result-value:empty ~ .result-caption {
+  font-size: 1rem;
+  color: var(--text);
+  margin-top: 0;
 }
 
 @media (min-width: 640px) {
